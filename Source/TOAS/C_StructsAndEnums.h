@@ -89,3 +89,13 @@ enum class EElementalAttribute : uint8
 	DARK UMETA(DisplayName = "Dark Element"),
 	NON_LETHAL UMETA(DisplayName = "Non-Lethal Element"),
 };
+
+// Enumerator to choose what prompts to use for controls.
+UENUM(BlueprintType)
+enum class EPromptControl : uint8
+{
+	PC = 0 UMETA(DisplayName="PC"),
+	XBOX = 1 UMETA(DisplayName="Xbox"),
+	PS = 2 UMETA(DisplayName="PS"),
+	SWITCH = 3 UMETA(DisplayName="Switch")
+};

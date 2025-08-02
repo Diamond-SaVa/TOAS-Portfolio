@@ -8,6 +8,7 @@
 #include "Blueprint/UserWidget.h"
 #include "C_WB_MainMenu.generated.h"
 
+enum class EPromptControl : uint8;
 class UButton;
 
 /**
@@ -21,10 +22,7 @@ class TOAS_API UC_WB_MainMenu : public UUserWidget
 public:
 	UFUNCTION(BlueprintCallable)
 	UButton* GetNewGameButton() const { return NewGameButton; }
-
-	UFUNCTION(BlueprintCallable)
-	UButton* GetSettingsButton() const { return SettingsButton; }
-
+	
 	UFUNCTION(BlueprintCallable)
 	UButton* GetExitButton() const { return ExitButton; }
 
@@ -34,15 +32,30 @@ public:
 	UFUNCTION(BlueprintCallable, Category=UI)
 	void ConnectPlayerToGame();
 
+	UFUNCTION(BlueprintCallable, Category=UI)
+	void UpdateControlPrompts();
+
+	UFUNCTION(BlueprintCallable, Category=UI)
+	void SendControlPromptsToGI(const EPromptControl SelectedPrompt);
+
 protected:
 	virtual void NativeOnInitialized() override;
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
 	UButton* NewGameButton;
-
-	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
-	UButton* SettingsButton;
-
+	
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
 	UButton* ExitButton;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
+	UButton* PCButton;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
+	UButton* XboxButton;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
+	UButton* PSButton;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
+	UButton* SwitchButton;
 };

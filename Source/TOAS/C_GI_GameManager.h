@@ -21,8 +21,17 @@ class TOAS_API UC_GI_GameManager : public UGameInstance
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="DATA")
 	FSaveData SaveData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="DATA")
+	EPromptControl PromptControl = EPromptControl::PC;
 	
 public:
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "DATA_Getters")
+	EPromptControl GetPromptControl() const { return PromptControl; };
+
+	UFUNCTION(BlueprintCallable, Category = "DATA_Setters")
+	void SetPromptControl(const EPromptControl& NewPrompt) { PromptControl = NewPrompt; };
+	
 	UFUNCTION(BlueprintCallable, Category = "SaveData_Functions")
 	void UpdateChallengeOnSaveData(const FString& ChallengeID, const bool& bSuccess);
 

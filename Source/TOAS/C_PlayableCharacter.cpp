@@ -352,17 +352,11 @@ void AC_PlayableCharacter::TraceForZTarget()
 	if (ZTargetToTrack != nullptr)
 	{
 		DistanceToZTarget = GetDistanceTo(ZTargetToTrack);
-
-		GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Red,
-			FString::Printf(TEXT("ZTarget Distance : %f"), DistanceToZTarget));
 	}
 
 	if (SeenTarget != nullptr)
 	{
 		DistanceToSeenTarget = GetDistanceTo(SeenTarget);
-		
-		GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Red,
-			FString::Printf(TEXT("Seen Target Distance : %f"), DistanceToSeenTarget));
 	}
 
 	// Creates the array where to register the results from the trace.
