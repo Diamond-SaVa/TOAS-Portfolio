@@ -9,6 +9,27 @@
 #include "C_StructsAndEnums.h"
 #include "Components/Button.h"
 
+
+FReply UC_WB_MainMenu::NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent)
+{
+	return Super::NativeOnFocusReceived(InGeometry, InFocusEvent);
+
+	TArray<UButton*> AllButtons = { NewGameButton, ExitButton, PCButton, XboxButton, PSButton, SwitchButton,
+		CreditsButton, ReturnFromCreditsButton };
+
+	for (UButton* Button : AllButtons)
+	{
+		if (Button->HasKeyboardFocus())
+		{
+			Button->SetBackgroundColor(FLinearColor::Blue);
+		}
+		else
+		{
+			Button->SetBackgroundColor(FLinearColor::White);
+		}
+	}
+}
+
 void UC_WB_MainMenu::ConnectPlayerToWidget()
 {
 	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())

@@ -6,6 +6,7 @@
 #include "TOASGameMode.h"
 
 #include "C_WB_MainMenu.h"
+#include "C_WidgetNavigationSystem.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
@@ -33,4 +34,10 @@ void ATOASGameMode::BeginPlay()
 
 		MainManuWidgetObject->AddToPlayerScreen(99);
 	}
+
+	// Create an instance of your custom navigation config
+	TSharedRef<FNavigationConfig> GameNavigationConfig = MakeShareable(new UC_WidgetNavigationSystem());
+
+	// Set the SlateApplication to use your custom config
+	FSlateApplication::Get().SetNavigationConfig(GameNavigationConfig);
 }

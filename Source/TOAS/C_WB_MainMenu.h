@@ -6,6 +6,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Input/Reply.h"
 #include "C_WB_MainMenu.generated.h"
 
 enum class EPromptControl : uint8;
@@ -20,6 +21,8 @@ class TOAS_API UC_WB_MainMenu : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	virtual FReply NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent) override;
+	
 	UFUNCTION(BlueprintCallable)
 	UButton* GetNewGameButton() const { return NewGameButton; }
 	
@@ -38,9 +41,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category=UI)
 	void SendControlPromptsToGI(const EPromptControl SelectedPrompt);
 
-protected:
+	UFUNCTION()
 	virtual void NativeOnInitialized() override;
 
+protected:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
 	UButton* NewGameButton;
 	
@@ -58,4 +62,10 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
 	UButton* SwitchButton;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
+	UButton* CreditsButton;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
+	UButton* ReturnFromCreditsButton;
 };
