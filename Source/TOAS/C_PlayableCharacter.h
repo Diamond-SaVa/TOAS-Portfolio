@@ -325,7 +325,7 @@ protected:
 	
 	// Automatically rotates character to face Z Target; mostly used as support for Attacks.
 	UFUNCTION(BlueprintCallable, Category="PC_Functions")
-	void RotateCharacterIfZTargetIsValid();
+	void RotateCharacterIfNotTargeting();
 
 	// Automatically rotates character to a Location.
 	UFUNCTION(BlueprintCallable, Category="PC_Functions")

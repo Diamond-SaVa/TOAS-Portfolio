@@ -4,31 +4,10 @@
 
 
 #include "C_WB_MainMenu.h"
-
 #include "C_GI_GameManager.h"
 #include "C_StructsAndEnums.h"
+#include "C_UW_SelectButton.h"
 #include "Components/Button.h"
-
-
-FReply UC_WB_MainMenu::NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent)
-{
-	return Super::NativeOnFocusReceived(InGeometry, InFocusEvent);
-
-	TArray<UButton*> AllButtons = { NewGameButton, ExitButton, PCButton, XboxButton, PSButton, SwitchButton,
-		CreditsButton, ReturnFromCreditsButton };
-
-	for (UButton* Button : AllButtons)
-	{
-		if (Button->HasKeyboardFocus())
-		{
-			Button->SetBackgroundColor(FLinearColor::Blue);
-		}
-		else
-		{
-			Button->SetBackgroundColor(FLinearColor::White);
-		}
-	}
-}
 
 void UC_WB_MainMenu::ConnectPlayerToWidget()
 {
@@ -36,7 +15,10 @@ void UC_WB_MainMenu::ConnectPlayerToWidget()
 	{
 		FInputModeUIOnly input;
 		input.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
-		input.SetWidgetToFocus(NewGameButton->TakeWidget());
+		if (NewGameButton != nullptr)
+		{
+			input.SetWidgetToFocus(NewGameButton->GetCustomButton()->TakeWidget());
+		}
 		PC->SetInputMode(input);
 		PC->SetShowMouseCursor(true);
 	}
@@ -104,6 +86,19 @@ void UC_WB_MainMenu::SendControlPromptsToGI(const EPromptControl SelectedPrompt)
 	{
 		GI_GameManager->SetPromptControl(SelectedPrompt);
 	}
+}
+
+void UC_WB_MainMenu::SetEnableButtonsAll(const bool IsEnabled)
+{
+	for (const UC_UW_SelectButton* ButtonToDisable : AllButtons())
+	{
+		ButtonToDisable->GetCustomButton()->SetIsEnabled(IsEnabled);
+	}
+}
+
+void UC_WB_MainMenu::SetEnableButtonSingle(const UC_UW_SelectButton* ButtonToDisable, const bool IsEnabled)
+{
+	ButtonToDisable->GetCustomButton()->SetIsEnabled(IsEnabled);
 }
 
 void UC_WB_MainMenu::NativeOnInitialized()

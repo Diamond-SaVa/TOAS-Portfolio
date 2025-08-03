@@ -6,14 +6,12 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Input/Reply.h"
 #include "C_WB_MainMenu.generated.h"
 
+class UC_UW_SelectButton;
 enum class EPromptControl : uint8;
-class UButton;
-
 /**
- * 
+ * Class for the Main Menu of the Game on Startup.
  */
 UCLASS()
 class TOAS_API UC_WB_MainMenu : public UUserWidget
@@ -21,13 +19,14 @@ class TOAS_API UC_WB_MainMenu : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	virtual FReply NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent) override;
-	
 	UFUNCTION(BlueprintCallable)
-	UButton* GetNewGameButton() const { return NewGameButton; }
-	
-	UFUNCTION(BlueprintCallable)
-	UButton* GetExitButton() const { return ExitButton; }
+	TArray<UC_UW_SelectButton*> AllButtons ()
+	{
+		return {
+			NewGameButton, ExitButton, PCButton, XboxButton, PSButton,
+			SwitchButton, CreditsButton, ReturnFromCreditsButton
+		};
+	};
 
 	UFUNCTION(BlueprintCallable, Category=UI)
 	void ConnectPlayerToWidget();
@@ -41,31 +40,37 @@ public:
 	UFUNCTION(BlueprintCallable, Category=UI)
 	void SendControlPromptsToGI(const EPromptControl SelectedPrompt);
 
+	UFUNCTION(BlueprintCallable, Category=UI)
+	void SetEnableButtonsAll(const bool IsEnabled);
+
+	UFUNCTION(BlueprintCallable, Category=UI)
+	void SetEnableButtonSingle(const UC_UW_SelectButton* ButtonToDisable, const bool IsEnabled);
+
 	UFUNCTION()
 	virtual void NativeOnInitialized() override;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
-	UButton* NewGameButton;
+	UC_UW_SelectButton* NewGameButton;
 	
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
-	UButton* ExitButton;
+	UC_UW_SelectButton* ExitButton;
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
-	UButton* PCButton;
+	UC_UW_SelectButton* PCButton;
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
-	UButton* XboxButton;
+	UC_UW_SelectButton* XboxButton;
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
-	UButton* PSButton;
+	UC_UW_SelectButton* PSButton;
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
-	UButton* SwitchButton;
+	UC_UW_SelectButton* SwitchButton;
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
-	UButton* CreditsButton;
+	UC_UW_SelectButton* CreditsButton;
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess=true, BindWidget))
-	UButton* ReturnFromCreditsButton;
+	UC_UW_SelectButton* ReturnFromCreditsButton;
 };

@@ -105,30 +105,30 @@ void AC_PlayableCharacter::MoveAct(const FInputActionValue& Value)
 	// Magnitude of the Stick being pushed.
 	StickMagnitude = MovementVector.Size();
 
-	// IF character is Attacking, Dodging, or Wall Sliding,
-	if (bIsAttacking == true || bIsDodging == true || bIsWallSliding == true)
+	// If character is either Wall Sliding,
+	// or the character does not possess a Player Controller,
+	// or more specifically, if character is currently attacking a SeenTarget or a ZTarget,
+	if (bIsWallSliding == true || Controller == nullptr
+		|| (bIsAttacking == true && (SeenTarget != nullptr || ZTargetToTrack != nullptr)))
 	{
 		// then stop all further code execution.
 		return;
 	}
 
-	// Checks if the Character is being controlled,
-	if (Controller != nullptr)
-	{
-		// find out which way is forward,
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
+	// Find out which way is forward fom Controller Rotation,
+	const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get forward vector from Controller Rotation,
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	// get forward vector from Controller Rotation,
+	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	
-		// get right vector from Controller Rotation,
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-		// add movement using the obtained Vectors.
-		AddMovementInput(ForwardDirection,  MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
-	}
+	// get right vector from Controller Rotation,
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	
+	// add movement using the vectors.
+	AddMovementInput(ForwardDirection,  MovementVector.Y);
+	AddMovementInput(RightDirection, MovementVector.X);
+	
 }
 
 void AC_PlayableCharacter::StopMoveAct(const FInputActionValue& Value)
@@ -247,22 +247,29 @@ void AC_PlayableCharacter::AttackChainManager(EAttackType &Branches)
 	}
 }
 
-void AC_PlayableCharacter::RotateCharacterIfZTargetIsValid()
+void AC_PlayableCharacter::RotateCharacterIfNotTargeting()
 {
-	// As long as there is a valid ZTarget being Tracked,
-	if (IsValid(ZTargetToTrack))
+	// As long as there are no characters to ZTarget or See,
+	if (IsValid(ZTargetToTrack) == true || IsValid(SeenTarget) == true ||
+		GetController() == nullptr || StickVector == FVector::ZeroVector)
 	{
-		// obtain the current rotation of the playable character,
-		const FRotator CurrentRot = GetActorRotation();
-		// then obtain the look at rotator towards the target,
-		FRotator TargetRot;
-		GetLookAtRotatorWithLocation(ZTargetToTrack->GetActorLocation(), TargetRot);
-
-		// and update the actor's rotation by using the Yaw value towards the target,
-		// and keep the Actor's Roll and Pitch value to make sure it's not rotating in an undesired way.
-		const FRotator NewRot = FRotator(CurrentRot.Pitch, TargetRot.Yaw, CurrentRot.Roll);
-		SetActorRotation(NewRot);
+		return;
 	}
+	
+	// Find out which way is forward fom Controller Rotation,
+	const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+	// get forward vector from Controller Rotation,
+	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	
+	// get right vector from Controller Rotation,
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+	FVector RotateDirection = (ForwardDirection * StickVector.Y) + (RightDirection * StickVector.X);
+	RotateDirection.Normalize();
+
+	SetActorRotation(RotateDirection.ToOrientationRotator());
 }
 
 void AC_PlayableCharacter::RotateCharacterToWall(const FVector& WallHitLocation)
