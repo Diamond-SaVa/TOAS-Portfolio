@@ -37,7 +37,11 @@ AC_PlayableCharacter::AC_PlayableCharacter()
 void AC_PlayableCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	
+
+	if (GetWorld() && GetWorld()->IsPaused())
+	{
+		return;
+	}
 	// Allows the character to track when it faces a wall and begins to slide, or stick to it. 
 	WallSlideManager();
 	
