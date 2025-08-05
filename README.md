@@ -10,7 +10,7 @@ While others may use the provided code for their own projects, proper credit is 
 
 
 
-Programming, Modeling and Texturing
+Programming, Modeling, Texturing and Music
 
 Ricardo Sánchez Villegas
 
@@ -60,5 +60,5 @@ https://www.kittehface.com/2020/03/free-controller-prompts.html
 
 Special Thanks
 
-To my beloved Andrea for your love that has supported me all this time, as well my dear family's and their understanding of my passion as a game developer.
+To my beloved Andrea and my dear family for all of your love and support that has led me to where I am now and where I am meant to be.
 
